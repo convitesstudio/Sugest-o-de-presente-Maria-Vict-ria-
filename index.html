@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>Pagamento via Pix</title>
+
+  <style>
+    :root {
+      --verde-oliva: #68734B;
+      --verde-hover: #53603A;
+      --fundo: #ffffff;
+      --texto: #34382D;
+      --texto-suave: #777B70;
+      --borda: #E8EAE3;
+      --fundo-cartao: #FAFBF8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #F5F6F2;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--texto);
+    }
+
+    .pagina {
+      width: 100%;
+      max-width: 430px;
+      min-height: 0;
+      background: var(--fundo);
+      border-radius: 22px;
+      padding: 30px 24px 20px;
+      text-align: center;
+      box-shadow: 0 8px 35px rgba(40, 45, 30, 0.06);
+    }
+
+    .logo-pix {
+      width: 76px;
+      height: auto;
+      margin: 0 auto 22px;
+      display: block;
+    }
+
+    .etiqueta {
+      color: var(--verde-oliva);
+      font-size: 11px;
+      letter-spacing: 2px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(25px, 6vw, 30px);
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .descricao {
+      color: var(--texto-suave);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 23px;
+    }
+
+    .cartao-recebedor {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 15px 16px;
+      background: var(--fundo-cartao);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .icone-usuario {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #EEF0E8;
+      color: var(--verde-oliva);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icone-usuario svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .informacao-recebedor small {
+      display: block;
+      color: var(--texto-suave);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .informacao-recebedor strong {
+      font-size: 14px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .area-pix {
+      margin-bottom: 18px;
+    }
+
+    .area-pix p {
+      color: var(--texto-suave);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .botao-copiar {
+      width: 100%;
+      min-height: 52px;
+      border: none;
+      border-radius: 12px;
+      background: var(--verde-oliva);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .botao-copiar:hover {
+      background: var(--verde-hover);
+    }
+
+    .botao-copiar:active {
+      transform: scale(0.98);
+    }
+
+    .botao-copiar svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .botao-copiar.copiado {
+      background: #91a8d2;
+    }
+
+    .mensagem {
+      min-height: 19px;
+      margin-top: 10px;
+      color: #4F7557;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .divisor {
+      height: 1px;
+      background: var(--borda);
+      margin: 18px 0;
+    }
+
+    .area-qrcode {
+      display: none;
+      margin-bottom: 18px;
+    }
+
+    .area-qrcode.ativo {
+      display: block;
+    }
+
+    .area-qrcode h2 {
+      font-family: Georgia, serif;
+      font-size: 19px;
+      font-weight: normal;
+      margin-bottom: 8px;
+    }
+
+    .area-qrcode p {
+      color: var(--texto-suave);
+      font-size: 12px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .imagem-qrcode {
+      width: 190px;
+      max-width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 8px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .aviso-qrcode {
+      font-size: 11px;
+      color: var(--texto-suave);
+      margin-top: 8px;
+    }
+
+    .rodape {
+      border-top: 1px solid var(--borda);
+      padding-top: 15px;
+      margin-top: 18px;
+      color: var(--texto-suave);
+      font-size: 11px;
+      letter-spacing: 0.3px;
+    }
+
+    .rodape strong {
+      color: var(--verde-oliva);
+      font-weight: 600;
+    }
+
+    @media (min-width: 600px) {
+      body {
+        padding: 40px 20px;
+      }
+
+      .pagina {
+        padding: 36px 30px 24px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .pagina {
+        padding: 25px 18px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="pagina">
+
+    <!-- LOGOTIPO PIX -->
+    <img
+      class="logo-pix"
+      src="https://upload.wikimedia.org/wikipedia/commons/5/50/Pix_%28Brazil%29_logo.svg"
+      alt="Pix"
+    >
+
+    <div class="etiqueta">PAGAMENTO VIA PIX</div>
+
+    <h1 id="nome-noivos">Maria e João</h1>
+
+    <p class="descricao">
+      Para aqueles que desejarem me presentear, mas tiverem dúvidas quanto às minhas preferências, disponibilizo a opção de Pix, com muito carinho e gratidão pela lembrança.
+    </p>
+
+    <!-- CARTÃO DO RECEBEDOR -->
+    <section class="cartao-recebedor">
+
+      <div class="icone-usuario">
+        <svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.7"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/>
+        </svg>
+      </div>
+
+      <div class="informacao-recebedor">
+        <small>Nome do recebedor</small>
+        <strong id="nome-recebedor">Maria Silva</strong>
+      </div>
+
+    </section>
+
+    <!-- BOTÃO DE COPIAR -->
+    <section class="area-pix">
+
+      <p>Toque no botão para copiar a chave Pix.</p>
+
+      <button class="botao-copiar" id="botao-copiar"
+        type="button" onclick="copiarPix()">
+
+        <svg id="icone-copiar" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <rect x="8" y="8" width="12" height="12" rx="2"/>
+          <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
+        </svg>
+
+        <span id="texto-botao">Copiar chave Pix</span>
+      </button>
+
+      <div class="mensagem" id="mensagem" aria-live="polite"></div>
+
+    </section>
+
+    <!-- QR CODE OPCIONAL -->
+    <section class="area-qrcode" id="area-qrcode">
+
+      <div class="divisor"></div>
+
+      <h2>Pague também pelo QR Code</h2>
+
+      <p>Abra o aplicativo do seu banco e escaneie o código abaixo.</p>
+
+      <img
+        class="imagem-qrcode"
+        id="imagem-qrcode"
+        src=""
+        alt="QR Code para pagamento via Pix"
+      >
+
+      <div class="aviso-qrcode">
+        Utilize a câmera ou o leitor Pix do seu banco.
+      </div>
+
+    </section>
+
+    <footer class="rodape">
+      Desenvolvido por <strong>@studio.convites</strong>
+    </footer>
+
+  </main>
+
+  <script>
+    /* =========================================
+       🟨 PERSONALIZE AQUI PARA CADA CASAL
+       ========================================= */
+
+    // 🟨 NOME DOS NOIVOS
+    const NOME_DOS_NOIVOS = "15 anos da Maria Victória";
+
+    // 🟨 NOME DO RECEBEDOR
+    const NOME_DO_RECEBEDOR = "Maria Victória Borges Feitosa";
+
+    // 🟨 CHAVE PIX
+    const CHAVE_PIX = "05700026139";
+
+    // 🟨 COR PRINCIPAL
+    const COR_PRINCIPAL = "#072c5c";
+
+    // 🟨 COR DO FUNDO
+    const COR_DO_FUNDO = "#ffffff";
+
+    // 🟨 QR CODE OPCIONAL
+    // Deixe vazio para não exibir o QR Code.
+    // Coloque o endereço de uma imagem para exibi-lo.
+    const IMAGEM_QRCODE = "";
+
+    /* =========================================
+       NÃO PRECISA ALTERAR ABAIXO DESTA LINHA
+       ========================================= */
+
+    document.getElementById("nome-noivos").textContent =
+      NOME_DOS_NOIVOS;
+
+    document.getElementById("nome-recebedor").textContent =
+      NOME_DO_RECEBEDOR;
+
+    document.documentElement.style.setProperty(
+      "--verde-oliva", COR_PRINCIPAL
+    );
+
+    document.documentElement.style.setProperty(
+      "--fundo", COR_DO_FUNDO
+    );
+
+    const areaQRCode = document.getElementById("area-qrcode");
+    const imagemQRCode = document.getElementById("imagem-qrcode");
+
+    if (IMAGEM_QRCODE.trim() !== "") {
+      imagemQRCode.src = IMAGEM_QRCODE;
+      areaQRCode.classList.add("ativo");
+    }
+
+    let temporizadorMensagem;
+
+    async function copiarPix() {
+      const botao = document.getElementById("botao-copiar");
+      const texto = document.getElementById("texto-botao");
+      const mensagem = document.getElementById("mensagem");
+
+      if (!CHAVE_PIX || CHAVE_PIX === "COLOQUE_A_CHAVE_PIX_AQUI") {
+        mensagem.textContent = "Adicione sua chave Pix no código.";
+        return;
+      }
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(CHAVE_PIX);
+        } else {
+          const campo = document.createElement("textarea");
+          campo.value = CHAVE_PIX;
+          campo.style.position = "fixed";
+          campo.style.opacity = "0";
+          document.body.appendChild(campo);
+          campo.select();
+
+          const sucesso = document.execCommand("copy");
+          campo.remove();
+
+          if (!sucesso) throw new Error("Falha ao copiar");
+        }
+
+        botao.classList.add("copiado");
+        texto.textContent = "Chave copiada!";
+        mensagem.textContent = "Agora é só colar no aplicativo do seu banco.";
+
+        clearTimeout(temporizadorMensagem);
+
+        temporizadorMensagem = setTimeout(() => {
+          botao.classList.remove("copiado");
+          texto.textContent = "Copiar chave Pix";
+          mensagem.textContent = "";
+        }, 3000);
+
+      } catch (erro) {
+        mensagem.textContent = "";
+      }
+    }
+  </script>
+
+</body>
+</html>
