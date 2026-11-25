@@ -8,8 +8,10 @@
 
   <style>
     :root {
-      --azul serenity: #91a8d2;
-      --azul-hover: #91a8d2;
+      --verde-oliva: #68734B;
+      --verde-hover: #53603A;
+      --verde-copiado: #4F7557;
+      --cor-mensagem: #4F7557;
       --fundo: #ffffff;
       --texto: #34382D;
       --texto-suave: #777B70;
@@ -53,7 +55,7 @@
     }
 
     .etiqueta {
-      color: var(--azul serenity);
+      color: var(--verde-oliva);
       font-size: 11px;
       letter-spacing: 2px;
       font-weight: bold;
@@ -92,7 +94,7 @@
       height: 38px;
       border-radius: 50%;
       background: #EEF0E8;
-      color: var(--azul serenity);
+      color: var(--verde-oliva);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -132,7 +134,7 @@
       min-height: 52px;
       border: none;
       border-radius: 12px;
-      background: var(--azul serenity);
+      background: var(--verde-oliva);
       color: #ffffff;
       font-size: 14px;
       font-weight: bold;
@@ -157,14 +159,16 @@
       height: 18px;
     }
 
+    /* 🟨 COR DO BOTÃO DEPOIS DE COPIAR */
     .botao-copiar.copiado {
-      background: #91a8d2;
+      background: var(--verde-copiado);
     }
 
+    /* 🟨 COR DA MENSAGEM ABAIXO DO BOTÃO */
     .mensagem {
       min-height: 19px;
       margin-top: 10px;
-      color: #4F7557;
+      color: var(--cor-mensagem);
       font-size: 12px;
       font-weight: bold;
     }
@@ -264,7 +268,7 @@
     <h1 id="nome-noivos">Maria e João</h1>
 
     <p class="descricao">
-      Para aqueles que desejarem me presentear, mas tiverem dúvidas quanto às minhas preferências, disponibilizo a opção de Pix, com muito carinho e gratidão pela lembrança.
+    🟨  Para aqueles que desejarem me presentear, mas tiverem dúvidas quanto às minhas preferências, disponibilizo a opção de Pix, com muito carinho e gratidão pela lembrança.
     </p>
 
     <!-- CARTÃO DO RECEBEDOR -->
@@ -351,11 +355,23 @@
     // 🟨 CHAVE PIX
     const CHAVE_PIX = "05700026139";
 
-    // 🟨 COR PRINCIPAL
+    // 🟨 COR PRINCIPAL DO BOTÃO PIX
     const COR_PRINCIPAL = "#072c5c";
 
-    // 🟨 COR DO FUNDO
+    // 🟨 COR DO FUNDO DA PÁGINA
     const COR_DO_FUNDO = "#ffffff";
+
+    // 🟨 COR DO BOTÃO DEPOIS QUE A CHAVE FOR COPIADA
+    const COR_BOTAO_COPIADO = "#91a8d2";
+
+    // 🟨 COR DA MENSAGEM ABAIXO DO BOTÃO
+    const COR_MENSAGEM = "#072c5c";
+
+    // 🟨 TEXTO QUE APARECE DENTRO DO BOTÃO DEPOIS DE COPIAR
+    const TEXTO_BOTAO_COPIADO = "Chave copiada!";
+
+    // 🟨 MENSAGEM QUE APARECE ABAIXO DO BOTÃO DEPOIS DE COPIAR
+    const MENSAGEM_COPIA = "Agora é só colar no aplicativo do seu banco.";
 
     // 🟨 QR CODE OPCIONAL
     // Deixe vazio para não exibir o QR Code.
@@ -373,11 +389,19 @@
       NOME_DO_RECEBEDOR;
 
     document.documentElement.style.setProperty(
-      "--azul serenity", COR_PRINCIPAL
+      "--verde-oliva", COR_PRINCIPAL
     );
 
     document.documentElement.style.setProperty(
       "--fundo", COR_DO_FUNDO
+    );
+
+    document.documentElement.style.setProperty(
+      "--verde-copiado", COR_BOTAO_COPIADO
+    );
+
+    document.documentElement.style.setProperty(
+      "--cor-mensagem", COR_MENSAGEM
     );
 
     const areaQRCode = document.getElementById("area-qrcode");
@@ -418,8 +442,12 @@
         }
 
         botao.classList.add("copiado");
-        texto.textContent = "Chave copiada!";
-        mensagem.textContent = "Agora é só colar no aplicativo do seu banco.";
+
+        // 🟨 TEXTO DO BOTÃO DEPOIS DE COPIAR
+        texto.textContent = TEXTO_BOTAO_COPIADO;
+
+        // 🟨 MENSAGEM ABAIXO DO BOTÃO
+        mensagem.textContent = MENSAGEM_COPIA;
 
         clearTimeout(temporizadorMensagem);
 
